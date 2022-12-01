@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var button: Button
     private lateinit var tvOutput: TextView
     private val GALLERY_REQUEST_CODE = 123
+    private lateinit var prueba : Button
+    private lateinit var textprueba : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +41,17 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        prueba = findViewById(R.id.btn_prueba)
+        textprueba = findViewById(R.id.textview)
+        prueba.setOnClickListener{
+            textprueba.setText("1")
+        }
+
         imageView = binding.imageView
         button = binding.btnCaptureImage
         tvOutput = binding.tvOutput
         val buttonLoad = binding.btnLoadImage
+
 
         button.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA)
@@ -185,5 +194,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    fun buscar(){
+
     }
 }

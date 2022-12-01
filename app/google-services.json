@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "917553455702",
+    "project_id": "ssharkapp",
+    "storage_bucket": "ssharkapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917553455702:android:49812472de6029868891f7",
+        "android_client_info": {
+          "package_name": "com.example.sshark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917553455702-n5dfdqk2t2f7kq15fe0ecvba9q1p6nvs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCetuQ2fVqFoDCnKucHnozbVL_Ar7HFrCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917553455702-n5dfdqk2t2f7kq15fe0ecvba9q1p6nvs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
