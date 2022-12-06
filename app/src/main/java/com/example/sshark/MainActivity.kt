@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import androidx.core.content.ContextCompat
 import java.io.IOException
 import com.example.sshark.databinding.ActivityMainBinding
 import com.example.sshark.ml.BirdsModel
+import com.google.firebase.firestore.FirebaseFirestore
 import org.tensorflow.lite.support.image.TensorImage
 
 class MainActivity : AppCompatActivity() {
@@ -34,18 +36,49 @@ class MainActivity : AppCompatActivity() {
     private val GALLERY_REQUEST_CODE = 123
     private lateinit var prueba : Button
     private lateinit var textprueba : TextView
+    private lateinit var inputprueba : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         prueba = findViewById(R.id.btn_prueba)
         textprueba = findViewById(R.id.textview)
+        inputprueba = findViewById(R.id.pruebaInput)
         prueba.setOnClickListener{
-            textprueba.setText("1")
+            val db : FirebaseFirestore = FirebaseFirestore.getInstance()
+            var valor = inputprueba.getText()
+            var datos = ""
+            db.collection("sSharkBase")
+                .document(valor.toString())
+                .get()
+                .addOnSuccessListener { resultado ->
+                    //for(documento in resultado){
+                    //   datos += "${documento.id}: ${documento.data}\n"
+                    //}
+                    //datos = resultado.nombre
+                    println("Hello, world!!!")
+                    println(valor)
+                    println(resultado)
+                    datos = resultado["nombre"].toString()
+                    println(datos)
+                    textprueba.setText(datos)
+                }
+                .addOnFailureListener{ exception ->
+                    textprueba.setText("No se ha podido conectar")
+                }
+
+            //var valor = inputprueba.getText()
+            //textprueba.setText(valor)
         }
+
+
 
         imageView = binding.imageView
         button = binding.btnCaptureImage
@@ -196,7 +229,5 @@ class MainActivity : AppCompatActivity() {
         return null
     }
 
-    fun buscar(){
 
-    }
 }
