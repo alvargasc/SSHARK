@@ -35,21 +35,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvOutput: TextView
     private val GALLERY_REQUEST_CODE = 123
     private lateinit var prueba : Button
-    private lateinit var textprueba : TextView
     private lateinit var inputprueba : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
         prueba = findViewById(R.id.btn_prueba)
-        textprueba = findViewById(R.id.textview)
         inputprueba = findViewById(R.id.pruebaInput)
         prueba.setOnClickListener{
             val db : FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -59,23 +54,19 @@ class MainActivity : AppCompatActivity() {
                 .document(valor.toString())
                 .get()
                 .addOnSuccessListener { resultado ->
-                    //for(documento in resultado){
-                    //   datos += "${documento.id}: ${documento.data}\n"
-                    //}
-                    //datos = resultado.nombre
-                    println("Hello, world!!!")
-                    println(valor)
-                    println(resultado)
-                    datos = resultado["nombre"].toString()
-                    println(datos)
-                    textprueba.setText(datos)
+                    val intento1 = Intent(this, Respuesta::class.java)
+                    intento1.putExtra("nombre", resultado["nombre"].toString() );
+                    intento1.putExtra("protegido", resultado["protegido"].toString());
+                    intento1.putExtra("veda",resultado["protegido"].toString() );
+                    startActivity(intento1)
                 }
                 .addOnFailureListener{ exception ->
-                    textprueba.setText("No se ha podido conectar")
+                    val intento2 = Intent(this, Respuesta::class.java)
+                    intento2.putExtra("nombre", "No se ha podido conectar");
+                    startActivity(intento2)
                 }
 
             //var valor = inputprueba.getText()
-            //textprueba.setText(valor)
         }
 
 
@@ -155,6 +146,7 @@ class MainActivity : AppCompatActivity() {
                         imageView.setImageBitmap(bitmap)
                         outputGenerator(bitmap)
                     }
+
                 }else {
                     Log.e("TAG", "onActivityResult: error in selecting image")
                 }
