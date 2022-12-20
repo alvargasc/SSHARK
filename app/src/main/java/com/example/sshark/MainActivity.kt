@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED
             ) {
-                takePicturePreview.launch(null)
+                val intento1 = Intent(this, Espera::class.java)
+                startActivity(intento1)
+                //takePicturePreview.launch(null)
             } else {
                 requestPermission.launch(Manifest.permission.CAMERA)
             }
@@ -45,68 +47,12 @@ class MainActivity : AppCompatActivity() {
     //request camera permission
     private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){ granted->
         if(granted){
-            takePicturePreview.launch(null)
+            val intento1 = Intent(this, Espera::class.java)
+            startActivity(intento1)
+            //takePicturePreview.launch(null)
         }else {
             Toast.makeText(this, "Permiso denegado!! Intentalo denuevo", Toast.LENGTH_SHORT).show()
         }
     }
 
-    //launch camera and take picture
-    private val takePicturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()){ bitmap->
-        if(bitmap != null){
-            outputGenerator(bitmap)
-        }
-    }
-
-    private fun outputGenerator(bitmap: Bitmap){
-        //declearing tensor flow lite model variable
-        val model = ModeloTiburonPrueba.newInstance(this)
-        //val model = BirdsModel.newInstance(this)
-
-        // converting bitmap into tensor flow image
-        val newBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val tfimage = TensorImage.fromBitmap(newBitmap)
-
-        //process the image using trained model and sort it in descending order
-        val outputs = model.process(tfimage)
-            .probabilityAsCategoryList.apply {
-                sortByDescending { it.score }
-            }
-
-        //getting result having high probability
-        val highProbabilityOutput = outputs[0]
-
-        //setting output text
-        //tvOutput.text = highProbabilityOutput.label
-        //inputprueba.setText(highProbabilityOutput.label)
-        Log.i("TAG", "outputGenerator: $highProbabilityOutput")
-
-        val db : FirebaseFirestore = FirebaseFirestore.getInstance()
-        var valor = highProbabilityOutput.label
-        println("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
-        println(valor)
-        val stream = ByteArrayOutputStream()
-        // Compress the bitmap with JPEG format and specified quality
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        val byteArray = stream.toByteArray()
-        println(byteArray)
-
-        db.collection("sSharkBase")
-            .document(valor.toString())
-            .get()
-            .addOnSuccessListener { resultado ->
-                val intento1 = Intent(this, Respuesta::class.java)
-                intento1.putExtra("nombre", resultado["nombre"].toString() );
-                intento1.putExtra("protegido", resultado["protegido"].toString());
-                intento1.putExtra("veda",resultado["protegido"].toString() );
-                intento1.putExtra("imagen",byteArray)
-                startActivity(intento1)
-            }
-            .addOnFailureListener{ exception ->
-                val intento2 = Intent(this, Respuesta::class.java)
-                intento2.putExtra("nombre", "No se ha podido conectar");
-                startActivity(intento2)
-            }
-
-    }
 }
